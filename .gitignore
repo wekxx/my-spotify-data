@@ -1,0 +1,29 @@
+# Private Spotify exports and extracted personal history
+/Spotify Extended Streaming History/
+
+# Local environment and generated output
+.env
+.env.*
+!.env.example
+dist/
+node_modules/
+coverage/
+*.log
+.vite/
+*.tsbuildinfo
+/vite.config.js
+/vite.config.d.ts
+
+# Local Codex artifacts and private project notes
+/.agents/
+/.planning/
+/.ui-backups/
+/apk-iteration/
+
+# Local planning and review artifacts; README is the public guide.
+/PRD.md
+
+# Synthetic fixtures are allowed only under src/test/fixtures.
+# Keep any other archive exports local.
+*.zip
+!/src/test/fixtures/*.zip
