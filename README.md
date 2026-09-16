@@ -17,6 +17,33 @@ Explore your Spotify Extended Streaming History with private, local analysis. Se
 
 The Android app has the same features as the web app. This repository contains the web source; the APK is available from GitHub Releases.
 
+## Screenshots
+
+<table width="100%">
+  <tr>
+    <td width="25%">
+      <img src="screenshots/upload-screen.png" alt="Upload Spotify history" width="100%" />
+    </td>
+    <td width="25%">
+      <img src="screenshots/rankings-all-years.png" alt="All-time track rankings" width="100%" />
+    </td>
+    <td rowspan="2" width="25%">
+      <img src="screenshots/metrics-all-years.png" alt="All-time listening metrics" width="100%" />
+    </td>
+    <td rowspan="2" width="25%">
+      <img src="screenshots/metrics-single-year.png" alt="Single-year listening metrics" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td width="25%">
+	  <img src="screenshots/rankings-all-years-selection.png" alt="Select tracks for a playlist" width="100%" />
+    </td>
+    <td width="25%">
+      <img src="screenshots/rankings-create-playlist.png" alt="Create a playlist" width="100%" />
+    </td>
+  </tr>
+</table>
+
 ## Privacy
 
 Your listening history is processed on your device. Imported files, listening events, rankings, and CSV exports are not uploaded to an application server.
