@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
+import { Capacitor } from '@capacitor/core'
 import { ArrowUpRight, Check, Download, ExternalLink, FileArchive, FileJson, ListPlus, RotateCcw, Upload, X } from 'lucide-react'
 import { AppHeader } from './components/AppHeader'
 import { Metrics } from './components/Metrics'
@@ -29,9 +30,10 @@ const previewResult: Analysis | undefined = import.meta.env.DEV && new URLSearch
 function Landing({ onFiles, error }: { onFiles: (files: File[]) => void; error?: string }) {
   const input = useRef<HTMLInputElement>(null)
   const redirectUri = spotifyRedirectUri()
+  const localProcessingTarget = Capacitor.isNativePlatform() ? 'the app' : 'your browser'
   const accept = useCallback((list: FileList | null) => list && onFiles([...list]), [onFiles])
   return <main className="landing">
-    <section className="hero"><h1><span className="hero-title-line">Your Spotify history,</span><br/><em>decoded.</em></h1><p className="lede">Discover your all-time top tracks and artists, listening patterns, and create playlists.</p></section>
+    <section className="hero"><h1><span className="hero-title-line">Your Spotify history,</span><br/><em>decoded.</em></h1><p className="lede">Discover your all-time top tracks and artists, listening patterns, and create playlists — all processed locally in {localProcessingTarget}.</p></section>
     <section className="upload-card" role="button" tabIndex={0} aria-label="Import Spotify data files" aria-describedby={error ? 'upload-help upload-error' : 'upload-help'} onClick={(event) => { if (event.target !== input.current) input.current?.click() }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); input.current?.click() } }} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); accept(e.dataTransfer.files) }}>
       <input ref={input} className="sr-only" type="file" accept=".zip,.json,application/json,application/zip" multiple tabIndex={-1} aria-hidden="true" onChange={(e) => accept(e.target.files)}/>
       <div className="upload-icon"><Upload/></div><h2>Import your Spotify data</h2><p id="upload-help">Drop files here, or tap/click to browse</p>

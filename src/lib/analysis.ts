@@ -74,7 +74,8 @@ export async function analyzeFiles(files: InputFile[]): Promise<Analysis> {
       const row = item as Record<string, unknown>
       const uri = row.spotify_track_uri
       if (typeof uri !== 'string' || !TRACK_URI.test(uri)) { fileIgnored++; continue }
-      add(bucket, uri, clean(row.master_metadata_track_name, 'Unknown track'), clean(row.master_metadata_album_artist_name, 'Unknown artist'))
+      const duration = typeof row.ms_played === 'number' && Number.isFinite(row.ms_played) && row.ms_played > 0 ? row.ms_played : 0
+      if (duration >= 30_000) add(bucket, uri, clean(row.master_metadata_track_name, 'Unknown track'), clean(row.master_metadata_album_artist_name, 'Unknown artist'))
       if (typeof row.skipped === 'boolean') {
         const skipProfile = metrics.skipProfileByYear[match[1]] ??= { eligiblePlays: 0, skippedPlays: 0, quickSkips: 0 }
         skipProfile.eligiblePlays++; metrics.skipProfile.eligiblePlays++
@@ -94,7 +95,6 @@ export async function analyzeFiles(files: InputFile[]): Promise<Analysis> {
         const timestampMs = timestamp.valueOf()
         metrics.timestampedPlayTimes.push(timestampMs)
         ;(metrics.timestampedPlayTimesByYear[timestampYear] ??= []).push(timestampMs)
-        const duration = typeof row.ms_played === 'number' && Number.isFinite(row.ms_played) && row.ms_played > 0 ? row.ms_played : 0
         if (duration) { metrics.monthlyListeningMs[month] = (metrics.monthlyListeningMs[month] ?? 0) + duration; metrics.timedPlays++ }
       }
       fileValid++

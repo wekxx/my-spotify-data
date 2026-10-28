@@ -1,8 +1,12 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from './App'
 
+const { isNativePlatform } = vi.hoisted(() => ({ isNativePlatform: vi.fn(() => false) }))
+vi.mock('@capacitor/core', () => ({ Capacitor: { isNativePlatform } }))
+
 afterEach(cleanup)
+beforeEach(() => isNativePlatform.mockReturnValue(false))
 
 describe('App landing upload prompt', () => {
   it('opens the file picker from the upload area and shows supported formats', () => {
@@ -19,5 +23,16 @@ describe('App landing upload prompt', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Import Spotify data files' }))
 
     expect(openPicker).toHaveBeenCalledOnce()
+  })
+
+  it('says browser processing is local on web', () => {
+    render(<App />)
+    expect(screen.getByText('Discover your all-time top tracks and artists, listening patterns, and create playlists — all processed locally in your browser.')).toBeInTheDocument()
+  })
+
+  it('says app processing is local on Android', () => {
+    isNativePlatform.mockReturnValue(true)
+    render(<App />)
+    expect(screen.getByText('Discover your all-time top tracks and artists, listening patterns, and create playlists — all processed locally in the app.')).toBeInTheDocument()
   })
 })
